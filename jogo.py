@@ -8,6 +8,19 @@ running = True
 estado = 'menu'
 personagem = 0
 
+# fundos 
+tela_inicial = pygame.image.load('assets/tela_inicial.jpeg').convert()  # Imagem de tela inicial
+tela_inicial = pygame.transform.scale(tela_inicial, (640, 480))
+tela_selecao_p1 = pygame.image.load('assets/p1_selecionado.jpeg').convert()  # Seleção P1
+tela_selecao_p1 = pygame.transform.scale(tela_selecao_p1, (640, 480))
+tela_selecao_p2 = pygame.image.load('assets/p2_selecionado.jpeg').convert()  # Seleção P2
+tela_selecao_p2 = pygame.transform.scale(tela_selecao_p2, (640, 480))
+bg_jogo_p1 = pygame.image.load('assets/p2_oponente.jpeg').convert()  # P2 como oponente
+bg_jogo_p1 = pygame.transform.scale(bg_jogo_p1, (640, 480))
+bg_jogo_p2 = pygame.image.load('assets/p1_oponente.jpeg').convert()  # P1 como oponente
+bg_jogo_p2 = pygame.transform.scale(bg_jogo_p2, (640, 480))
+
+
 while running:
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
@@ -33,15 +46,19 @@ while running:
         if estado == 'menu':
             screen.fill((255, 255, 255))
         
-        #Teste da funcionalidade do menu de seleção de personagem
-        elif estado == 'selecao_personagem':
-            if personagem == 0:
-                screen.fill((0, 0, 255)) #azul para representar personagem esquerdo
-            elif personagem == 1:
-                screen.fill((255, 0, 0)) #vermelho para representar personagem direito
-        elif estado == 'jogo':
-            screen.fill((0, 255, 0)) #tela fica verde após selecionar um dos personagens
-            
+        # Definir fundo
+    if estado == 'menu':
+        screen.blit(tela_inicial, (0, 0))
+    elif estado == 'selecao_personagem':
+        if personagem == 0:
+            screen.blit(tela_selecao_p1, (0, 0))
+        elif personagem == 1:
+            screen.blit(tela_selecao_p2, (0, 0))
+    elif estado == 'jogo':
+        if personagem == 0:
+            screen.blit(bg_jogo_p1, (0, 0))
+        else:
+            screen.blit(bg_jogo_p2, (0, 0))
 
 
   pygame.display.flip()
