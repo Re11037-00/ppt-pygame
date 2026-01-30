@@ -1,12 +1,20 @@
 import pygame
+import random
 
 pygame.init()
 screen = pygame.display.set_mode((640, 480))
 clock = pygame.time.Clock()
 running = True
 
+#variaveis
 estado = 'menu'
 personagem = 0
+opcoes = ['pedra', 'papel', 'tesoura']
+escolha_jogador = 0
+escolha_computador = random.choice(opcoes)
+pontos_jogador = 5
+pontos_computador = 5
+resultado = 0
 
 # fundos 
 tela_inicial = pygame.image.load('assets/tela_inicial.jpeg').convert()  # Imagem de tela inicial
@@ -42,9 +50,27 @@ while running:
 
             elif estado == 'selecao_personagem' and event.key == pygame.K_RETURN:
                 estado = 'jogo'  #inicia o jogo
+        
+            if estado == 'jogo': #controles do jogo
+                if event.key == pygame.K_LEFT:
+                    escolha_jogador = 'pedra'
+                elif event.key == pygame.K_UP:
+                    escolha_jogador = 'papel'
+                elif event.key == pygame.K_RIGHT:
+                    escolha_jogador = 'tesoura' 
 
-        if estado == 'menu':
-            screen.fill((255, 255, 255))
+
+        if escolha_jogador == escolha_computador: #lógica do jogo
+            resultado = 'empate'
+        elif (escolha_jogador == 'pedra' and escolha_computador == 'tesoura') or (escolha_jogador == 'papel' and escolha_computador == 'pedra') or (escolha_jogador == 'tesoura' and escolha_computador == 'papel'):
+            resultado = 'vitoria'
+            pontos_jogador += 1
+            pontos_computador -= 1
+        else:
+            resultado = 'derrota'
+            pontos_jogador -= 1
+            pontos_computador += 1
+
         
         # Definir fundo
     if estado == 'menu':
@@ -59,7 +85,6 @@ while running:
             screen.blit(bg_jogo_p1, (0, 0))
         else:
             screen.blit(bg_jogo_p2, (0, 0))
-
 
   pygame.display.flip()
   clock.tick(60)
