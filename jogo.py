@@ -5,16 +5,21 @@ pygame.init()
 screen = pygame.display.set_mode((640, 480))
 clock = pygame.time.Clock()
 running = True
+font = pygame.font.Font(None, 36)
 
 #variaveis
 estado = 'menu'
 personagem = 0
 opcoes = ['pedra', 'papel', 'tesoura']
-escolha_jogador = 0
+escolha_jogador = None
 escolha_computador = random.choice(opcoes)
 pontos_jogador = 5
 pontos_computador = 5
 resultado = 0
+
+#balão de fala
+mensagem = ""
+texto = font.render(mensagem, True, (255, 255, 255))
 
 # fundos 
 tela_inicial = pygame.image.load('assets/tela_inicial.jpeg').convert()  # Imagem de tela inicial
@@ -71,7 +76,16 @@ while running:
             pontos_jogador -= 1
             pontos_computador += 1
 
-        
+
+        # if estado == 'jogo': #'texto no balão de fala'
+        #     mensagem = f'você escolheu {escolha_jogador} computador escolheu {escolha_computador}. Resultado: {resultado}! Pontos - Você: {pontos_jogador}, Computador: {pontos_computador}'
+
+        if estado == 'jogo' and (pontos_jogador == 0 or pontos_computador == 0):
+            estado = 'menu'  #volta para o menu se algum jogador chegar a 0 pontos
+            pontos_jogador = 5
+            pontos_computador = 5
+            mensagem = ""
+
         # Definir fundo
     if estado == 'menu':
         screen.blit(tela_inicial, (0, 0))
@@ -85,6 +99,13 @@ while running:
             screen.blit(bg_jogo_p1, (0, 0))
         else:
             screen.blit(bg_jogo_p2, (0, 0))
+
+    #criar balão
+    if estado == 'jogo':
+        # texto = font.render(mensagem, True, (255, 255, 255))
+        pygame.draw.rect(screen, (0, 0, 0), (20, 350, 600, 100))
+        screen.blit(texto, (30, 360))
+
 
   pygame.display.flip()
   clock.tick(60)
