@@ -72,51 +72,62 @@ while running:
         elif estado == 'menu' and event.key == pygame.K_RETURN:
             estado = 'selecao_personagem' 
 
+        elif estado == 'vitoria' and event.key == pygame.K_RETURN or estado == 'derrota' and event.key == pygame.K_RETURN:
+            estado = 'menu'
+
     #seleção de personagem
         elif estado == 'selecao_personagem':
             if event.key == pygame.K_LEFT:
                 personagem = 0 #personagem da esquerda
             elif event.key == pygame.K_RIGHT:
                 personagem = 1 #personagem da direita
-
-    #inicia o jogo
-        elif estado == 'selecao_personagem' and event.key == pygame.K_RETURN:
-                estado = 'jogo'  
+            elif estado == 'selecao_personagem' and event.key == pygame.K_RETURN:
+                estado = 'jogo'  #inicia o jogo
         
-    #controles + lógica do jogo
+    #lógica do jogo
         elif estado == 'jogo': 
-
-
+            if rodada_ativa:
+                escolha_jogador = None
+                escolha_computador = None
+                rodada_ativa = False
+                linha1 = ''
+                linha2 = ''
+                linha3 = ''
+                linha4 = ''
+            else:
+                #controles
                 if event.key == pygame.K_LEFT:
                     escolha_jogador = 'pedra'
                 elif event.key == pygame.K_UP:
                     escolha_jogador = 'papel'
                 elif event.key == pygame.K_RIGHT:
-                    escolha_jogador = 'tesoura' 
+                    escolha_jogador = 'tesoura'
+                
+                if escolha_jogador != None:
+                    rodada_ativa = True
+                    escolha_computador = random.choice(opcoes)  
 
+                    #empate
+                    if escolha_jogador == escolha_computador:
+                        resultado = 'Empate!'
 
-        if escolha_jogador == escolha_computador: #lógica do jogo
-            resultado = 'empate'
-        elif (escolha_jogador == 'pedra' and escolha_computador == 'tesoura') or (escolha_jogador == 'papel' and escolha_computador == 'pedra') or (escolha_jogador == 'tesoura' and escolha_computador == 'papel'):
-            resultado = 'vitoria'
-            pontos_jogador += 1
-            pontos_computador -= 1
-        else:
-            resultado = 'derrota'
-            pontos_jogador -= 1
-            pontos_computador += 1
+                    #vitória
+                    elif (escolha_jogador == 'pedra' and escolha_computador == 'tesoura') or (escolha_jogador == 'papel' and escolha_computador == 'pedra') or (escolha_jogador == 'tesoura' and escolha_computador == 'papel'):
+                        resultado = 'Vitória!'
+                        pontos_jogador = pontos_jogador + 1
+                        pontos_computador = pontos_computador - 1
 
+                    #derrota
+                    else:
+                        resultado = 'Derrota!'
+                        pontos_jogador = pontos_jogador - 1
+                        pontos_computador = pontos_computador + 1
 
-        # if estado == 'jogo': #'texto no balão de fala'
-        #     mensagem = f'você escolheu {escolha_jogador} computador escolheu {escolha_computador}. Resultado: {resultado}! Pontos - Você: {pontos_jogador}, Computador: {pontos_computador}'
-
-        if estado == 'jogo' and (pontos_jogador == 0 or pontos_computador == 0):
-            estado = 'menu'  #volta para o menu se algum jogador chegar a 0 pontos
-            pontos_jogador = 5
-            pontos_computador = 5
-            mensagem = ""
-
-        # Definir fundo
+                    #atualizar balão de fala
+                    linha1 = f'Pontos - Jogador: {pontos_jogador} | Computador: {pontos_computador}'
+                    linha2 = f'Jogador: {escolha_jogador}'
+                    linha3 = f'Computador: {escolha_computador}'
+                    linha4 = f'Resultado: {resultado}'
     
     #definir tela
     if estado == 'menu':
