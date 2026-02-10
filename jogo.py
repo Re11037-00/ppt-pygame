@@ -56,7 +56,7 @@ vitoria = pygame.transform.scale(vitoria, (640, 480))
 derrota = pygame.image.load('assets/derrota.png').convert()
 derrota = pygame.transform.scale(derrota, (640, 480))
 
-
+#loop do jogo
 while running:
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
@@ -129,10 +129,24 @@ while running:
             screen.blit(tela_selecao_p2, (0, 0))
 
     elif estado == 'jogo':
-        if personagem == 0:
-            screen.blit(bg_jogo_p1, (0, 0))
-        if personagem == 1:
-            screen.blit(bg_jogo_p2, (0, 0))
+        screen.blit(bg_jogo_p1 if personagem == 0 else bg_jogo_p2, (0, 0))
+
+        #balão de fala + texto
+        pygame.draw.rect(screen, (0, 0, 0), (20, 330, 600, 130)) #balão de fala
+        y = 340
+        for linha in [linha1, linha2, linha3, linha4]: #texto do balão de fala
+            texto = font.render(linha, True, (255, 255, 255))
+            screen.blit(texto, (30, y))
+            y += 30
+        if pontos_computador == 0:
+            estado = 'vitoria'
+        elif pontos_jogador == 0:
+            estado = 'derrota'
+            
+    elif estado == 'vitoria':
+        screen.blit(vitoria, (0, 0))    
+    elif estado == 'derrota':
+        screen.blit(derrota, (0, 0))
 
 
     
